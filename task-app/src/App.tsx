@@ -1,13 +1,9 @@
 import React from "react";
-import TaskList from "./components/TaskList";
+import WeatherDashboard from "./components/WeatherDashboard";
+import Dashboard from "./pages/Dashboard";
 
 const App: React.FC = () => {
-  return (
-    <div>
-      <h1>Task Management App</h1>
-      <TaskList />
-    </div>
-  );
+  return <Dashboard />;
 };
 
 export default App;

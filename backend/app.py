@@ -1,33 +1,22 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
+from flask_cors import CORS
+import random
+import time
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for the frontend to access the backend
 
-tasks = [
-    {"id": 1, "task": "Learn Python", "completed": False},
-    {"id": 2, "task": "Build a React App", "completed": False},
-]
+# Sample data: Mimicking weather data
+@app.route('/api/weather', methods=['GET'])
+def get_weather():
+    # Simulating random weather data for testing
+    weather_data = {
+        'temperature': round(random.uniform(15.0, 30.0), 2),  # Random temperature between 15°C and 30°C
+        'humidity': round(random.uniform(40.0, 70.0), 2),  # Random humidity between 40% and 70%
+        'description': random.choice(['Clear sky', 'Cloudy', 'Rainy', 'Thunderstorms'])  # Random weather description
+    }
+    
+    return jsonify(weather_data)
 
-# Route to get all tasks
-@app.route("/tasks", methods=["GET"])
-def get_tasks():
-    return jsonify({"tasks": tasks})
-
-# Route to add a new task
-@app.route("/tasks", methods=["POST"])
-def add_task():
-    new_task = request.json
-    new_task["id"] = len(tasks) + 1
-    tasks.append(new_task)
-    return jsonify({"task": new_task}), 201
-
-# Route to update a task's completion status
-@app.route("/tasks/<int:task_id>", methods=["PUT"])
-def update_task(task_id):
-    task = next((t for t in tasks if t["id"] == task_id), None)
-    if task:
-        task["completed"] = request.json.get("completed", task["completed"])
-        return jsonify({"task": task})
-    return jsonify({"error": "Task not found"}), 404
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)
